@@ -3,6 +3,7 @@
 ## 🔷 Mục lục
 - **[Tổng quan SQL](#-tổng-quan-sql)**
 - **[Các câu lệnh cơ bản](#-các-câu-lệnh-cơ-bản)**
+- **[GROUP BY](#-group-by)**
 
 ## 🔷 Tổng quan
 
@@ -187,3 +188,204 @@
     SELECT * FROM employees  
     WHERE name LIKE 'A%';
     ```
+
+## 🔷 GROUP BY
+
+- Aggregation Functions: là các hàm được sử dụng để thực hiện các phép toán tính toán trên tập dữ liệu và trả về một giá trị duy nhất. Chúng thường được sử dụng cùng với câu lệnh GROUP BY để tổng hợp dữ liệu từ nhiều hàng thành một hàng duy nhất. Dưới đây là một số hàm phổ biến.
+
+  - AVG(): sử dụng để tính giá trị trung bình cho một column
+    
+    - Syntax: 
+
+      ```sql
+      SELECT AVG(column_name) FROM table_name;  
+      ```
+
+    - Example: 
+      
+      ```sql
+      SELECT AVG(salary) FROM employees;  
+      ```
+
+  - AVG(): được sử dụng để đếm số lượng hàng trong một tập dữ liệu
+    
+    - Syntax: 
+
+      ```sql
+      SELECT COUNT(column_name) FROM table_name;  
+      ```
+
+    - Example: 
+      
+      ```sql
+      SELECT COUNT(*) FROM employees;  
+      ```
+
+  - SUM(): được sử dụng để tính tổng giá trị của một cột số. Nó chỉ hoạt động với các cột có kiểu dữ liệu số
+    
+    - Syntax: 
+
+      ```sql
+      SELECT SUM(column_name) FROM table_name;  
+      ```
+
+    - Example: 
+      
+      ```sql
+      SELECT SUM(salary) FROM employees;  
+      ```
+
+  - MAX(): được sử dụng để tìm giá trị lớn nhất trong một cột. Nó có thể được sử dụng với các kiểu dữ liệu khác nhau.
+    
+    - Syntax: 
+
+      ```sql
+      SELECT MAX(column_name) FROM table_name;  
+      ```
+
+    - Example: 
+      
+      ```sql
+      SELECT MAX(salary) FROM employees;  
+      ```
+
+  - MIN(): được sử dụng để tìm giá trị nhỏ nhất trong một cột. Nó cũng có thể được sử dụng với nhiều kiểu dữ liệu.
+    
+    - Syntax: 
+
+      ```sql
+      SELECT MIN(column_name) FROM table_name;  
+      ```
+
+    - Example: 
+      
+      ```sql
+      SELECT MIN(salary) FROM employees;  
+      ```
+
+- GROUP BY: được sử dụng để nhóm các dữ liệu giống nhau dựa trên một hoặc nhiều cột
+
+  - Syntax: 
+
+      ```sql
+      SELECT column1, column2, aggregate_function(column3)  
+      FROM table_name  
+      WHERE condition  
+      GROUP BY column1, column2;  
+      ```
+
+  - Example: 
+      
+    ```sql
+    SELECT department, AVG(salary) AS average_salary  
+    FROM employees  
+    GROUP BY department;  
+    ```
+
+- HAVING: được sử dụng để lọc các kết quả từ một câu lệnh GROUP BY. Khác với WHERE, mà áp dụng cho các hàng trước khi chúng được nhóm, HAVING được áp dụng cho các nhóm đã được tạo ra.
+
+  - Syntax:
+
+    ```sql
+    SELECT column1, column2
+    FROM table1, table2
+    WHERE [ conditions ]
+    GROUP BY column1, column2
+    HAVING [ conditions ]
+    ORDER BY column1, column2
+    ```
+
+  - Example:
+
+    ```sql
+    SELECT department, COUNT(*) AS employee_count  
+    FROM employees  
+    GROUP BY department  
+    HAVING COUNT(*) > 10;  
+    ```
+
+## 🔷 JOIN
+
+- AS: được sử dụng để đặt alias (biệt danh) cho các column hoặc table trong các truy vấn. Sử dụng alias giúp mã SQL trở nên dễ đọc hơn và cho phép bạn gán tên dễ hiểu cho dữ liệu mà bạn đang truy vấn, đặc biệt khi làm việc với các hàm tổng hợp hoặc các bảng phức tạp.
+
+  - Syntax:
+
+    ```sql
+    SELECT column_name AS alias_name  
+    FROM table_name;
+    ```
+
+  - Example:
+
+    ```sql
+    SELECT first_name AS FirstName, last_name AS LastName, salary  
+    FROM employees;
+    ```
+
+- INNER: được sử dụng để kết hợp các hàng từ hai hoặc nhiều bảng dựa trên mối quan hệ giữa chúng. JOIN cho phép bạn truy xuất dữ liệu từ nhiều bảng theo cách hợp lý và hiệu quả. Có nhiều loại JOIN, mỗi loại phục vụ cho mục đích khác nhau.
+
+  - INNER JOIN: chỉ trả về các hàng mà có dữ liệu khớp nhau trong cả hai bảng.
+
+    - Syntax:
+
+      ```sql
+      SELECT table1.columns1, table2.columns2,...
+      FROM table1  
+      INNER JOIN table2  
+      ON table1.ccolumn = table2.column; 
+      ```
+
+  - FULL JOIN (FULL OUTER JOIN): trả về tất cả các hàng từ cả hai bảng, và sẽ khớp các hàng mà có dữ liệu trùng lặp, nếu không có khớp, nó sẽ trả về NULL.
+
+    - Syntax:
+
+      ```sql
+      SELECT table1.columns1, table2.columns2,...
+      FROM table1  
+      FULL OUTER JOIN table2  
+      ON table1.column = table2.column; 
+      ```
+
+  - LEFT JOIN: trả về tất cả các hàng từ bảng bên trái ngay cả khi không có kết quả nào khớp với bảng bên phải. Nếu không có khớp, nó sẽ trả về NULL từ bảng bên phải.
+
+    - Syntax:
+
+      ```sql
+      SELECT table1.columns1, table2.columns2,...
+      FROM table1  
+      LEFT JOIN table2  
+      ON table1.column = table2.column; 
+      ```
+
+  - RIGHT JOIN: trả về tất cả các hàng từ bảng bên phải ngay cả khi không có kết quả nào khớp với bảng bên trái. Nếu không có khớp, nó sẽ trả về NULL từ bảng bên trái.
+
+    - Syntax:
+
+      ```sql
+      SELECT table1.columns1, table2.columns2,...
+      FROM table1  
+      RIGHT JOIN table2  
+      ON table1.column = table2.column; 
+      ```
+
+  - SELF JOIN: được sử dụng để nối một bảng với chính nó
+
+    - Syntax:
+
+      ```sql
+      SELECT a.columns1, b.columns2,...
+      FROM table1 a, table1 b
+      ON a.column = b.column; 
+      ```
+
+  - UNION: được sử dụng để kết hợp các kết quả từ hai hoặc nhiều truy vấn SELECT. Điều này cho phép lấy dữ liệu từ nhiều nguồn và hiển thị chúng trong một tập hợp kết quả duy nhất. Để sử dụng UNION, các truy vấn SELECT phải có cùng số cột và kiểu dữ liệu tương ứng. UNION tự động loại bỏ các hàng trùng lặp. Nếu bạn muốn giữ các hàng trùng lặp, bạn có thể sử dụng UNION ALL.
+
+    - Syntax:
+
+      ```sql
+      SELECT columns1, columns2,...
+      FROM table1
+      UNION
+      SELECT columns1, columns2,...
+      FROM table2;
+      ```
