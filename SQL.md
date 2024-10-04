@@ -4,6 +4,7 @@
 - **[Tổng quan SQL](#-tổng-quan-sql)**
 - **[Các câu lệnh cơ bản](#-các-câu-lệnh-cơ-bản)**
 - **[GROUP BY](#-group-by)**
+- **[CREATING DATABASE AND TABLE](#-creating-database-and-table)**
 
 ## 🔷 Tổng quan
 
@@ -188,6 +189,25 @@
     SELECT * FROM employees  
     WHERE name LIKE 'A%';
     ```
+
+- SUB QUERY: là một truy vấn được lồng bên trong một truy vấn khác. Subquery có thể được sử dụng trong nhiều phần của câu lệnh SQL, bao gồm trong phần SELECT, FROM, hoặc WHERE. Subquery có thể trả về một hoặc nhiều giá trị.
+
+  - Syntax:
+
+    ```sql
+    SELECT column1, column2, ...  
+    FROM table_name  
+    WHERE column_name IN (SELECT column_name FROM table_name WHERE condition);
+    ```
+
+  - Example
+
+    ```sql
+    SELECT employee_id, employee_name  
+    FROM employees  
+    WHERE department_id IN (SELECT department_id FROM departments WHERE department_name = 'Sales'); 
+    ```
+
 
 ## 🔷 GROUP BY
 
@@ -389,3 +409,18 @@
       SELECT columns1, columns2,...
       FROM table2;
       ```
+
+## 🔷 CREATING DATABASE AND TABLE
+
+  - Data type: là một phần quan trọng vì nó xác định loại dữ liệu mà một column trong table có thể lưu trữ. Các hệ quản trị cơ sở dữ liệu khác nhau có thể có các kiểu dữ liệu khác nhau, nhưng các kiểu cơ bản thường được chia thành các nhóm như sau:
+
+    - Numeric: dữ liệu kiểu số. Ví dụ INT, FLOAT, DOUBLE,...
+    - String: dữ liệu kiểu chuỗi. Ví dụ CHAR, VARCHAR,...
+    - DateTime: dùng để lư trữ thông tin về thời gian. Ví dụ DATE, TIME, DATETIME,...
+    - BOOLEAN: lưu trữ giá trị true/false
+    - BLOB: lưu trữ dữ liệu nhị phân lớn, chẳng hạn như hình ảnh, video,...
+    - JSON: lưu trữ dữ liệu định dạng JSON.
+
+  - Primary key: được sử dụng để xác định một tính duy nhất mỗi bản ghi trong một bảng. Nó đảm bảo tính toàn vẹn dữ liệu của bảng. Một bảng có thể chỉ bao gồm một primary key, primary key này có thể bao gồm một hoặc nhiều cột. Primary key không cho phép null hoặc trùng lặp giá trị.
+
+  - Foreign Key: dùng để tạo mối quan hệ giữ 2 bảng, cho phép tham chiếu đến các bản ghi trong một bảng khác. Một bảng có thể có nhiều Foreign Key.
