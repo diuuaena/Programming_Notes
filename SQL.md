@@ -424,3 +424,78 @@
   - Primary key: được sử dụng để xác định một tính duy nhất mỗi bản ghi trong một bảng. Nó đảm bảo tính toàn vẹn dữ liệu của bảng. Một bảng có thể chỉ bao gồm một primary key, primary key này có thể bao gồm một hoặc nhiều cột. Primary key không cho phép null hoặc trùng lặp giá trị.
 
   - Foreign Key: dùng để tạo mối quan hệ giữ 2 bảng, cho phép tham chiếu đến các bản ghi trong một bảng khác. Một bảng có thể có nhiều Foreign Key.
+
+  - Constraints: được sử dụng để ngăn dữ liệu không hợp lệ được nhập vào cơ sở dữ liệu. Điều này đảm bảo tính chính xác và độ tin cậy của dữ liệu trong cơ sở dữ liệu. Có thể chia làm 2 loại: ràng buộc trên một cột dữ liệu và ràng buộc được áp dụng cho toàn bộ bảng
+
+    - Các constraint phổ biến:
+
+      - NOT NULL: Constraint này cho biết rằng không thể lưu một giá trị NULL cho cột đã được gán ràng buộc này. Điều đó có nghĩa là, nếu một cột được định nghĩa là NOT NULL, cột đó sẽ không thể chấp nhận các giá trị NULL được nữa.
+
+      - UNIQUE: Sử dụng khi muốn định nghĩa cho một cột phải có giá trị của nó là duy nhất, nếu một bản ghi đã có giá trị này trong cột của nó thì giá trị đó sẽ không được sử dụng để điền cho bản ghi nào khác trong cơ sở dữ liệu
+
+      - PRIMARY KEY: Một primary key(khóa chính) một hoặc một tập các trường có giá trị là duy nhất, có thể được sử dụng để phân biệt giữa các bản ghi với nhau. Việc khai báo các cột khóa chính yêu cầu các cột phải NOT NULL.
+
+      - FOREIGN KEY: Dùng để thiết lập khóa ngoại trên bảng, tham chiếu đến bảng khác thông qua giá trị của cột được liên kết. Giá trị của cột được liên kết phải là duy nhất trong bảng kia.
+
+      - CHECK: Giúp kiểm tra tính hợp lệ của đầu vào dữ liệu, điều này đảm bảo tất cả giá trị trong cột đảm bảo một điều kiện nào đó.
+
+      - DEFAULT: Ràng buộc này định nghĩa một giá trị mặc định cho một cột dữ liệu khi nó không được điền một giá trị cụ thể bởi người dùng
+
+  - CREATE: dùng để tạo database, table, view
+
+    - Syntax:
+
+      ```sql
+      CREATE DATABASE database_name
+      ```
+
+      ```sql
+      CREATE TABLE table_name (
+        column1 datatype,
+        column2 datatype,
+        column3 datatype,
+        ....
+      );
+      ```
+
+      ```sql
+      CREATE VIEW view_name AS
+      SELECT column1, column2, ...
+      FROM table_name
+      WHERE condition;
+      ```
+
+  - INSERT: dùng để thêm dữ liệu vào table trong cơ sở dữ liệu
+
+    - Syntax:
+
+      ```sql
+      INSERT INTO table_name (column1, column2, column3, ...)
+      VALUES (value1, value2, value3, ...);
+      ```
+
+      Nếu muốn thêm vào tất cả các cột trong table thì có thể sử dụng như sau
+
+      ```sql
+      INSERT INTO table_name
+      VALUES (value1, value2, value3, ...);
+      ```
+
+  - UPDATE: dùng để thay đổi giá trị dữ liệu của các cột trong bảng
+
+    - Syntax:
+
+      ```sql
+      UPDATE table_name
+      SET column1 = value1, column2 = value2, ...
+      WHERE condition;
+      ```
+
+  - DELETE: dùng để xoá dữ liệu của một hàng ra khỏi bảng
+
+    - Syntax:
+
+      ```sql
+      DELETE FROM table_name WHERE condition;
+      ```
+
