@@ -150,21 +150,67 @@
     season = 'season'
     ```
 ### Custom Types / Type Aliases
-- **Custom Types (Type Aliases)** Cho phép đặt bí danh cho một kiểu dữ liệu
+- **Custom Types (Type Aliases)** Cho phép tạo ra một tên cho loại dữ liệu
 
     ```ts
-    // create account type
-    type Account = {
-        username: string,
-        password: string,
-        fullname: string,
-        age: number
+    // create Name, Age, User type
+    type Name = string;
+    type Age = number;
+    type User = { name: Name; age: Age };
+
+    const user: User = { name: 'John', age: 30 };
+    ```
+
+### Unknown Types
+- **Unknown Types** là một kiểu dữ liệu an toàn tương ứng của **Any Types**. Bất kì thứ gì cũng có thể gán cho **Unknown Types** tuy nhiên nó không thể được gán cho bất kì thứ gì ngoài chính nó và **Any Types**. Không có thao tác nào được phép trên **Unknown Types** mà không được khẳng định hoặc thu hẹp thành một kiểu dữ liệu cụ thể
+
+    ```ts
+    let obj: unknown
+    let variable: any
+    let age: number = 5
+
+    // Success
+    obj = variable
+    obj = age
+
+    // Error: 'obj' is of type 'unknown'.ts(18046)
+    obj.call()
+    ```
+
+### Never Types
+- **Never Types**
+
+    + Là kiểu dữ liệu mà **Typescript** để biểu diễn trạng thái không nên tồn tại. **Never Types** có thể gán cho mọi kiểu, tuy nhiên, không có kiểu dữ dữ liệu nào có thể gán cho **Never Types** (trừ chính nó)
+
+    + Thường được sử dụng cho `Switch clause` để thực hiện kiểm tra toàn diện (khi đã loại bỏ tất cả khả năng và không còn gì nữa)
+
+    + Ngoài ra, **Never Types** là kiểu trả về cho biểu thức hàm hoặc biểu thức hàm
+
+    ```ts
+    enum SEASON {
+        SPRING,
+        SUMMER,
+        AUTUMN,
+        WINTER
     }
 
-    const acc: Account = {
-        username: 'TrQuan17',
-        password: '12345678',
-        fullname: 'Quan',
-        age: 24
+    const getTemperature = (season: SEASON) => {
+        switch(season) {
+            case SEASON.SPRING:
+                return 30
+            case SEASON.SUMMER:
+                return 36
+            case SEASON.AUTUMN:
+                return 25
+            case SEASON.WINTER:
+                return 15
+            default:
+                // Success
+                const _exhaustiveCheck:never = season
+                return _exhaustiveCheck
+        }
     }
+
+    // Error: Type '404' is not assignable to type 'never'.ts(2322)
+    const _exhaustiveCheck:never = 404
     ```
