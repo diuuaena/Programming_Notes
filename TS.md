@@ -4,6 +4,7 @@
 
 - **[Typescript là gì](#-typescript-là-gì)**
 - **[Các kiểu dữ liệu trong typescript](#-các-kiểu-dữ-liệu-trong-typescript)**
+- **[Classes](#-classes)**
 
 ## 🔷 Typescript là gì
 
@@ -210,7 +211,10 @@
                 return _exhaustiveCheck
         }
     }
-
     // Error: Type '404' is not assignable to type 'never'.ts(2322)
     const _exhaustiveCheck:never = 404
     ```
+
+## 🔷 Classes
+
+### Classes
