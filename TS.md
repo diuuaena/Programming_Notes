@@ -218,3 +218,132 @@
 ## 🔷 Classes
 
 ### Classes
+
+- **Classes** là bản thiết kế để tạo đối tượng, cung cấp cách để cấu trúc đối tượng và đóng gói dữ liệu và hành vi. Một **class** trong TS được định nghĩa bằng từ khoá `class`, theo sau là tên của **class**. Định nghĩa một **class** có thể bao gồm các **thuộc tính (attributes hoặc properties)**, **phương thức (methods)** và một **constructor**
+
+    ```ts
+    class Account {
+        /* properties */
+        public username?: string
+        public password?: string
+        public firstName?: string
+        public lastName?: string
+
+        /* Constructor */
+        constructor(
+            username?: string,
+            pass?: string,
+            first?: string,
+            last?: string
+        ) {
+            this.username = username
+            this.password = pass
+            this.firstName = first
+            this.lastName = last
+        }
+
+        /* Methods */
+        public showFullName(): string {
+            return `${this.firstName} ${this.lastName}`
+        }
+    }
+
+    const account = new Account('PhongNQ', '12345678', 'Phong', 'Nguyen Quoc')
+
+    console.log(account.showFullName())
+    ```
+
+- **Constructor** Trong TS, các tham số **Constructor** có thể được khai báo với các **Access Modifiers (public, private, protected)** và chú thích kiểu dữ liệu hoặc chỉ đơn giản là tham số với kiểu dữ liệu. Với tham số được khai báo với các **Access Modifiers**, TS sẽ tự động gán cho các thuộc tính có cùng tên trong **Constructor** và có thể truy cập trong class
+
+    ```ts
+    class Account {
+        public username?: string
+        public password?: string
+        public firstName?: string
+        public lastName?: string
+
+        // Normal signature with defaults
+        constructor(
+            username?: string,
+            pass?: string,
+            first?: string,
+            last?: string
+        ) {
+            this.username = username
+            this.password = pass
+            this.firstName = first
+            this.lastName = last
+        }
+    }
+
+    class Account {
+        constructor(
+            public username?: string,
+            private password?: string,
+            public firstName?: string,
+            public lastName?: string
+        )
+    }
+    ```
+
+- **Singletons Pattern với Private Constructor**
+
+    + **Singletons Pattern** là một **Design Pattern** đảm bảo rằng một class chỉ có duy nhất một instance và có thể cung cấp một cách toàn cầu để truy cập tới instance đó
+
+        ```ts
+        class Singleton {
+            static instance: Singleton
+
+            private constructor() {}
+
+            static getInstance() {
+                if (!this.instance) {
+                    this.instance = new Singleton()
+                }
+
+                return this.instance
+            }
+        }
+
+        const singleton1 = Singleton.getInstance()
+        const singleton2 = Singleton.getInstance()
+        ```
+
+### Getter và Setter
+
+- **Getter** và **Setter** cho phép kiểm soát quyền truy cập vào các thuộc tính của **class**. Đối với mỗi thuộc tính, bao gồm: phương thức **getter (accessor)** trả về giá trị của thuộc tính và phương thức **setter (mutator)** cập nhật giá trị của thuộc tính
+
+    ```ts
+    class Department {
+        constructor(
+            private name: string,
+            private employee?:string,
+            private employees: string[] = []
+        ) {}
+
+        get lastEmployee() {
+            if (!this.employee) {
+                throw new Error(`No employees in ${this.name}`)
+            }
+            return this.employee
+        }
+
+        set lastEmployee(employee: string) {
+            if (!employee) {
+                throw new Error('Employee is required!!!')
+            }
+
+            this.employees.push(employee)
+            this.employee = employee
+        }
+    }
+
+    const dep = new Department('IT Department')
+
+    // Using setter method
+    dep.lastEmployee = 'PhongNQ'
+    dep.lastEmployee = 'Phong'
+
+    // Using getter method
+    console.log(dep.lastEmployee)   // Return 'Phong'
+    ```
