@@ -5,6 +5,7 @@
 - **[Typescript là gì](#-typescript-là-gì)**
 - **[Các kiểu dữ liệu trong typescript](#-các-kiểu-dữ-liệu-trong-typescript)**
 - **[Classes](#-classes)**
+- **[Interface](#interface)**
 
 ## 🔷 Typescript là gì
 
@@ -166,9 +167,9 @@
 - **Unknown Types** là một kiểu dữ liệu an toàn tương ứng của **Any Types**. Bất kì thứ gì cũng có thể gán cho **Unknown Types** tuy nhiên nó không thể được gán cho bất kì thứ gì ngoài chính nó và **Any Types**. Không có thao tác nào được phép trên **Unknown Types** mà không được khẳng định hoặc thu hẹp thành một kiểu dữ liệu cụ thể
 
     ```ts
-    let obj: unknown
-    let variable: any
-    let age: number = 5
+    let obj: unknown;
+    let variable: any;
+    let age: number = 5;
 
     // Success
     obj = variable
@@ -215,6 +216,133 @@
     const _exhaustiveCheck:never = 404
     ```
 
+### Intersection Types
+
+- **Intersection Types** trong TS cho phép tạo ra kiểu dữ liệu mới bằng cách kết hợp nhiều kiểu dữ liệu lại với nhau. Kiểu mới có tất cả tính năng của các kiểu kết hợp
+
+    ```ts
+    type Admin = {
+        name: string
+        privileges: string[]
+    }
+
+    type Employee = {
+        name: string
+        startDate: Date
+    }
+
+    type ElevatedEmployee = Admin & Employee
+
+    const e: ElevatedEmployee = {
+        name: 'Quan',
+        privileges: ['build-server'],
+        startDate: new Date()
+    }
+    ```
+
+- Với **Intersection Types** các thuộc tính có các kiểu dữ liệu khác nhau sẽ được tự động hợp nhất. Khi kiểu dữ liệu được sử dụng sau đó, TS sẽ mong đợi thuộc tính thoả mãn cả hai kiểu dữ liệu cùng một lúc, điều này có thể tạo ra kết quả không mong muốn
+
+    ```ts
+    type Numeric    = number | boolean
+
+    type Characters = string | number
+
+    type VarChar = Numeric & Characters // typeof VarChar = number
+    ```
+
+    ```ts
+    type Numeric    = number
+
+    type Characters = string
+
+    type VarChar = Numeric & Characters // typeof VarChar = never
+    ```
+
+### Type Guards
+
+- **Type Guards** là một cách để thu hẹp kiểu dữ liệu của một biến, là một pattern code kiểm tra một kiểu nhất định trước khi thực hiện điều gì đó khi thực thi chương trình
+
+- **Toán tử instanceof** được sử dụng để kiểm tra một đối tượng có phải là một thể hiện của một class hay không
+
+    ```ts
+    class Bird {
+        constructor(public flySpeed: number) {}
+    }
+
+    class Horse {
+        constructor(public runSpeed: number) {}
+    }
+
+    const getAnimalSpeed = (animal: Bird | Horse) => {
+        if (animal instanceof Bird) {
+            return animal.flySpeed
+        }
+        
+        return animal.runSpeed
+    }
+    ```
+
+- **Toán tử typeof** được sử dụng để kiểm tra kiểu dữ liệu của một biến. Nó trả về một giá trị chuỗi biểu diễn kiểu dữ liệu của biến
+
+    ```ts
+    const logData = (data: number | string) => {
+        if (typeof data === 'number') {
+            data = data.toFixed(2)
+        }
+
+        return data
+    }
+
+    console.log(logData(5.2566))    // '5.26'
+    ```
+
+- **Các toán tử kiểm tra tính bằng nhau `===` `!==` `==` `!==`** TS cũng sử dụng các câu lệnh chuyển đổi và kiểm tra tính bằng nhau để thu hẹp các kiểu dữ liệu
+
+    ```ts
+    const showLimit = (x: number, y: string | number) => {
+        // x === y => typeof x === typeof y
+        if (x === y) {
+            return `[${x.toFixed(2)}; ${y.toFixed(2)}]`
+        } 
+        
+        return `[${x.toFixed(2)}; ${y.toString()})`
+    }
+
+    console.log(showLimit(3, '∞'))  // [3.00; ∞)
+    console.log(showLimit(4, 4))    // [4.00; 4.00]
+    ```
+
+### Index Signatures (Index Properties)
+
+- Trong TS, **Index Signatures** cho phép định nghĩa các kiểu object với các key động, trong đó các key có thể thuộc một kiểu dữ liệu cụ thể và các giá trị tương ứng có thể thuộc một kiểu khác. Điều này đặc biệt hữu ích khi muốn làm việc với các đối tượng có các thuộc tính không được biết tại thời điểm biên dịch nhưng phải tuân theo một mẫu cụ thể
+
+    ```ts
+    interface ErrorHandle {
+        id: string
+        [prop: string]: string
+    }
+
+    const errorHandle: ErrorHandle = {
+        id: '1',
+        mail: 'Incorrect mail format!',
+        username: 'Username is required!',
+    }
+
+    console.log(errorHandle.mail)   // 'Incorrect mail format!'
+
+    // Success
+    console.log(errorHandle.age)    // undefined    
+    ```
+
+- Key của **Index Signatures** chỉ có thể `string`, `number` hoặc `symbol`. Các loại khác không được phép
+
+    ```ts
+    // Error: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.ts(1337)
+    interface Seasion {
+        [prop: 'Summer' | 'Winner']: string
+    }
+    ```
+
 ## 🔷 Classes
 
 ### Classes
@@ -224,10 +352,10 @@
     ```ts
     class Account {
         /* properties */
-        public username?: string
-        public password?: string
-        public firstName?: string
-        public lastName?: string
+        public username?: string;
+        public password?: string;
+        public firstName?: string;
+        public lastName?: string;
 
         /* Constructor */
         constructor(
@@ -257,10 +385,10 @@
 
     ```ts
     class Account {
-        public username?: string
-        public password?: string
-        public firstName?: string
-        public lastName?: string
+        public username?: string;
+        public password?: string;
+        public firstName?: string;
+        public lastName?: string;
 
         // Normal signature with defaults
         constructor(
@@ -346,4 +474,365 @@
 
     // Using getter method
     console.log(dep.lastEmployee)   // Return 'Phong'
+    ```
+
+### Thuộc tính và phương thức tĩnh (Static)
+
+- **Thuộc tính và phương thức tĩnh** được chia sẻ giữa tất cả các instance của một class. Để khai báo một thuộc tính hoặc một phương thức tĩnh, sử dụng từ khoá `static` làm tiền tố
+
+    ```ts
+    class Department {
+        private static count: number = 0
+
+        constructor(
+            private id: string,
+            private name: string
+        ) {
+            // Using static property without static method
+            Department.count++
+        }
+
+        static get getNumOfEmployees() {
+            // Using static property with static method
+            return this.count
+        }
+    }
+
+    const JsDep = new Department('1', 'JS Department')
+    const GxDep = new Department('2', 'GX Department')
+
+    console.log(Department.getNumOfEmployees)   // 2
+    ```
+
+### OOP - Kế thừa (Inheritance)
+
+- **Kế thừa (Inheritance)** là một cơ chế mà một lớp con kế thừa các thuộc tính và phương thức từ lớp cha của nó. Điều này cho phép một lớp con sử dụng lại mã và hành vi của lớp cha đồng thời có thể thêm và sửa đổi hành vi của riêng nó. Trong TS, kế thừa được thực hiện bằng cách sử dụng từ khoá `extends`
+
+- **Kế thừa** cho phép chia sẻ một số chức năng chung và tạo ra các bản thiết kế chuyên biệt hơn
+
+    ```ts
+    class Department {
+        constructor(
+            private id: string,
+            private name: string,
+            protected employees: string[] = []
+        ) { }
+
+        get departmentName() {
+            return this.name
+        }
+    }
+
+    class ITDepartment extends Department {
+        constructor(
+            id: string,
+            employees: string[],
+            private mainTech: string
+        ) {
+            super(id, 'IT Department', employees)
+        }
+
+        getAdmin() {
+            return this.employees[0]
+        }
+
+        getMainTech() {
+            return this.mainTech
+        }
+    }
+
+    const IT = new ITDepartment('1', ['Quan', 'TrQuan17', 'QuanTT'], 'Web App')
+
+    console.log(IT.getAdmin())      // 'Quan'
+
+    console.log(IT.getMainTech())   // 'Web App'
+
+    console.log(IT.departmentName)  // 'IT Department'
+    ```
+
+### OOP - Trừu tượng (Abstract)
+
+- **Abstract class** trong TS là các class không thể tự khởi tạo, thay vào đó, nó phải có một class dẫn xuất để triển khai các class trừu tượng. **Abstract class** cung cấp một bản thiết kế cho các class khác. **Abstract class** có thể có các **phương thức abstract**, đây là các phương thức không có phần thân và phải được các lớp con ghi đè.
+
+- **Abstract class** hữu ích khi để định nghĩa một giao diện chung hoặc chức năng cơ bản mà lớp khác có thể kế thừa và xây dựng dựa trên đó
+
+    ```ts
+    abstract class Department {
+    
+        abstract name: string
+
+        constructor(private id: string){}
+
+        abstract addEmployees():void
+    }
+
+    // Error: Non-abstract class 'ITDepartment' is missing implementations 
+    // for the following members of 'Department': 'name', 'addEmployees'.ts(2654)
+    class ITDepartment extends Department {}
+    ```
+
+    ```ts
+    type Employee = {
+        name: string,
+        language: string
+    }
+
+    abstract class Department {
+
+        abstract name: string
+
+        constructor(protected id: string) { }
+
+        abstract addEmployees(employee: Employee): void
+    }
+
+    class ITDepartment extends Department {
+        constructor(
+            id: string,
+            public name: string = 'IT Department',
+            private employees: Employee[] = []
+        ) {
+            super(id)
+        }
+
+        addEmployees(employee: Employee): void {
+            if (!employee.language) {
+                throw new Error(`Not eligible to join ${this.name}`)
+            }
+
+            this.employees.push(employee)
+        }
+
+        get employeesList() {
+            return this.employees
+        }
+    }
+
+    const IT = new ITDepartment('1')
+
+    const employee: Employee = {
+        name: 'TrQuan',
+        language: 'Typescript'
+    }
+    IT.addEmployees(employee)
+
+    console.log(IT.employeesList)   // [ { name: 'TrQuan', language: 'Typescript' } ]
+    ```
+
+## 🔷 Interface
+
+### Interface
+
+- **Interface** trong TS cung cấp một cách để xác định kiểu dữ liệu, bao gồm tập hợp các thuộc tính, phương thức và sự kiện. Nó được sử dụng để thực thi một cấu trúc cho một đối tượng, class hoặc tham số của hàm. **Interface** không được biên dịch sang JS và chỉ được TS sử dụng tại thời điểm biên dịch cho mục đích kiểm tra kiểu dữ liệu
+
+    ```ts
+    interface IDateTime {
+        year: number
+        month: number
+        date: number
+        hour: number
+        minute: number
+        second: number
+        toString(): string
+    }
+
+    const datetime: IDateTime = {
+        year: 2025,
+        month: 1,
+        date: 24,
+        hour: 8,
+        minute: 0,
+        second: 0,
+
+        toString() {
+            return `${this.year}/${this.month}/${this.date} ${this.hour}:${this.minute}:${this.second}`
+        }
+    }
+
+    console.log(datetime.toString())    // '2025/1/24 8:0:0'
+    ```
+
+### Sử dụng Interface với Classes
+
+- Trong TS, mệnh đề **implements** có thể được sử dụng để xác minh rằng một class phải tuân thủ một interface cụ thể. Nếu một class không triển khai đúng interface, lỗi sẽ được sinh ra
+
+    ```ts
+    interface IDateTime {
+        year: number
+        month: number
+        date: number
+        hour: number
+        minute: number
+        second: number
+
+        toString(): string
+    }
+
+    class Time implements IDateTime {
+        constructor(
+            public year: number,
+            public month: number,
+            public date: number,
+            public hour: number,
+            public minute: number,
+            public second: number
+        ) {}
+
+        toString(): string {
+            return `${this.year}/${this.month}/${this.date} ${this.hour}:${this.minute}:${this.second}`
+        }
+
+        convertTimeToDays() {
+            return (this.second/(60*60*24) + this.minute/(60*24) + this.hour/24).toFixed(3)
+        }
+    }
+
+    const time = new Time(2025, 2, 4, 14, 20, 20)
+    console.log(time.toString())            // 2025/2/4 14:20:20
+    console.log(time.convertTimeToDays())   // 0.597
+
+    // Error: Class 'DateCustom' incorrectly implements interface 'IDateTime'.
+    //        Type 'DateCustom' is missing the following properties from type 'IDateTime': hour, minute, secondts(2420)
+    class DateCustom implements IDateTime {
+        constructor(
+            public year: number,
+            public month: number,
+            public date: number,
+        ) {}
+    }
+    ```
+
+- Một class có thể triển khai một hoặc nhiều interface cùng một lúc
+
+    ```ts
+    interface IProduct {
+        name: string
+        price: number
+    }
+
+    interface IBill {
+        id: string
+        nums: number
+        discount: number
+    }
+
+    class Pay implements IProduct, IBill {
+        constructor(
+            public id: string,
+            public nums: number,
+            public discount: number,
+            public name: string,
+            public price: number,
+        ) {}
+
+        get payable() {
+            return (this.nums * this.price) * this.discount/100
+        }
+    }
+    ```
+
+- Việc triển khai một interface với thuộc tính tuỳ chọn sẽ không tạo ra thuộc tính đó
+
+    ```ts
+    interface ICommonRole {
+        name: string
+        level: string
+        sublevel?: string
+    }
+
+    class Guest implements ICommonRole {
+        constructor(
+            public name: string,
+            public level: string = '1'
+        ) { }
+    }
+
+    const guest = new Guest('Quan')
+
+    // Error: Property 'sublevel' does not exist on type 'Guest'.ts(2339)
+    console.log(guest.sublevel)
+    ```
+
+- Ngoài ra, với một biến hoặc hằng số có kiểu dữ liệu là một interface có thể thực sự được dùng để lưu trữ class
+
+    ```ts
+    const time: IDateTime = new Time(2025, 2, 4, 14, 20, 20)
+    console.log(time.toString())    // 2025/2/4 14:20:20
+
+    // Error: Property 'convertTimeToDays' does not exist on type 'IDateTime'.ts(2339)
+    console.log(time.convertTimeToDays())
+
+    const bill: IBill        = new Pay('1', 5, 4, 'Phone', 1250000)
+    const product: IProduct  = new Pay('1', 5, 4, 'Phone', 1250000)
+    ```
+
+### Kế thừa với Interface
+
+- Trong TS, có thể mở rộng interface bằng cách tạo interface mới kế thừa từ interface gốc bằng từ khoá `extends`. Interface mới có thể bao gồm các thuộc tính, phương thức của interface gốc và bổ sung thêm các thuộc tính hoặc phương thức mới
+
+    ```ts
+    interface IPerson {
+        name: string
+        age: number
+    }
+
+    interface IEmployee extends IPerson {
+        department: string
+    }
+
+    const employee: IEmployee = {
+        name: 'Quan',
+        age: 24,
+        department: 'IT'
+    }
+    ```
+
+## 🔷 Generics
+
+- **Generics** trong TS là một cách để viết code có thể hoạt động với nhiều kiểu dữ liệu, thay vì bị giới hạn ở một kiểu dữ liệu duy nhất
+
+### Generic Types
+
+- **Generic Types** cho phép khởi tạo các đối tượng, hàm và class hoạt động với nhiều kiểu dữ liệu, thay vì bị giới hạn ở một kiểu dữ liệu duy nhất. **Generic Types** được định nghĩa bằng dấu ngoặc nhọn `<T>` và được sử dụng như một kiểu dữ liệu đại diện. Kiểu dữ liệu thực tế được chỉ định khi hàm hoặc class được sử dụng
+
+    ```ts
+    const convertString = <T>(data: T) => data?.toString()
+
+    console.log(convertString(5))           // '5'
+
+    console.log(convertString([1, 2, 3]))   // '1,2,3'
+    ```
+
+- Class với **Generic Types**
+
+    ```ts
+    class DataStorage<T> {
+        private data: T[] = []
+
+        add(...items: T[]) {
+            this.data.push(...items)
+        }
+
+        remove(item: T) {
+            this.data = this.data.filter((value) => !this.data.includes(item))
+        }
+
+        get dataList() {
+            return this.data
+        }
+    }
+
+    // With number type
+    const numberStorage = new DataStorage<number>()
+
+    numberStorage.add(1, 2, 4, 5, 4)
+
+    console.log(numberStorage.dataList) // [ 1, 2, 4, 5, 4 ]
+
+    // With string type
+    const stringStorage = new DataStorage<string>()
+
+    stringStorage.add('VietNam', 'China', 'Singapore')
+
+    console.log(stringStorage.dataList) // [ 'VietNam', 'China', 'Singapore' ]
     ```
