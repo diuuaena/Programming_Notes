@@ -234,7 +234,7 @@
     type ElevatedEmployee = Admin & Employee
 
     const e: ElevatedEmployee = {
-        name: 'Quan',
+        name: 'Phong',
         privileges: ['build-server'],
         startDate: new Date()
     }
@@ -541,9 +541,9 @@
         }
     }
 
-    const IT = new ITDepartment('1', ['Quan', 'TrQuan17', 'QuanTT'], 'Web App')
+    const IT = new ITDepartment('1', ['Phong', 'PhongNQ', 'PhongNQ'], 'Web App')
 
-    console.log(IT.getAdmin())      // 'Quan'
+    console.log(IT.getAdmin())      // 'Phong'
 
     console.log(IT.getMainTech())   // 'Web App'
 
@@ -611,12 +611,12 @@
     const IT = new ITDepartment('1')
 
     const employee: Employee = {
-        name: 'TrQuan',
+        name: 'PhongNQ',
         language: 'Typescript'
     }
     IT.addEmployees(employee)
 
-    console.log(IT.employeesList)   // [ { name: 'TrQuan', language: 'Typescript' } ]
+    console.log(IT.employeesList)   // [ { name: 'PhongNQ', language: 'Typescript' } ]
     ```
 
 ## 🔷 Interface
@@ -747,7 +747,7 @@
         ) { }
     }
 
-    const guest = new Guest('Quan')
+    const guest = new Guest('Phong')
 
     // Error: Property 'sublevel' does not exist on type 'Guest'.ts(2339)
     console.log(guest.sublevel)
@@ -781,8 +781,8 @@
     }
 
     const employee: IEmployee = {
-        name: 'Quan',
-        age: 24,
+        name: 'Phong',
+        age: 25,
         department: 'IT'
     }
     ```
