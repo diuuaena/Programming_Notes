@@ -65,6 +65,38 @@
         }
     ```
 
+### Array type
+
+- **Array type** là một danh sách dữ liệu được sắp xếp. Một mảng có thể lưu trữ một kiểu dữ liệu cụ thể hoặc hỗn hợp tuỳ vào cách khai báo.
+
+    ```ts
+    let skills: string[];
+    let series: Array<number>;
+    skills.push(100);   // Argument of type 'number' is not assignable to parameter of type 'string'.
+
+    // Storing values of mixed types
+    let scores : (string | number)[];
+    scores = ['Programming', 5, 'Software Design', 4]; 
+    ```
+
+### Object type
+
+- **Object type**: Trong JavaScript, cách cơ bản mà chúng ta nhóm và truyền dữ liệu là thông qua các đối tượng. Trong TypeScript, chúng ta biểu diễn chúng thông qua object type.
+
+    ```ts
+    let employee: {
+        firstName: string;
+        lastName: string;
+        age: number;
+        jobTitle: string;
+    } = {
+        firstName: 'John',
+        lastName: 'Doe',
+        age: 25,
+        jobTitle: 'Web Developer'
+    };
+    ```
+
 ### Tuples
 
 - **Tuples** là một kiểu dữ liệu trong **Typescript** được sử dụng để biểu diễn một mảng trong đó kiểu của một số phần tử cố định được khai báo từ ban đầu, nhưng không phải cho tất cả các phần tử. Nó cung cấp một cách để biểu diễn tập hợp các kiểu phần tử được sắp xếp cho các phần tử được sắp xếp cho các phần tử nhất định trong một mảng TS. **Tuples** luôn có một số phần tử cố định và mỗi phần tử trong số chúng có các kiểu được liên kết với chúng
@@ -186,7 +218,7 @@
 
     + Thường được sử dụng cho `Switch clause` để thực hiện kiểm tra toàn diện (khi đã loại bỏ tất cả khả năng và không còn gì nữa)
 
-    + Ngoài ra, **Never Types** là kiểu trả về cho biểu thức hàm hoặc biểu thức hàm
+    + Ngoài ra, **Never Types** là kiểu trả về cho biểu thức hàm
 
     ```ts
     enum SEASON {
