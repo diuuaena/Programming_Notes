@@ -868,3 +868,4 @@
 
     console.log(stringStorage.dataList) // [ 'VietNam', 'China', 'Singapore' ]
     ```
+    test
