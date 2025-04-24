@@ -7,6 +7,7 @@
 - **[Classes](#classes)**
 - **[Interface](#interface)**
 - **[Generics](#generics)**
+- **[Decorators](#decorators)**
 
 ## 🔷 Typescript là gì
 
