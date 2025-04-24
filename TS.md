@@ -2,10 +2,11 @@
 
 ## 🔷 MỤC LỤC
 
-- **[Typescript là gì](#-typescript-là-gì)**
-- **[Các kiểu dữ liệu trong typescript](#-các-kiểu-dữ-liệu-trong-typescript)**
-- **[Classes](#-classes)**
+- **[Typescript là gì](#typescript)**
+- **[Các kiểu dữ liệu trong typescript](#static-types-kiểu-dữ-liệu-tĩnh)**
+- **[Classes](#classes)**
 - **[Interface](#interface)**
+- **[Generics](#generics)**
 
 ## 🔷 Typescript là gì
 
@@ -63,38 +64,6 @@
             name: 'Phong',
             age: 25
         }
-    ```
-
-### Array type
-
-- **Array type** là một danh sách dữ liệu được sắp xếp. Một mảng có thể lưu trữ một kiểu dữ liệu cụ thể hoặc hỗn hợp tuỳ vào cách khai báo.
-
-    ```ts
-    let skills: string[];
-    let series: Array<number>;
-    skills.push(100);   // Argument of type 'number' is not assignable to parameter of type 'string'.
-
-    // Storing values of mixed types
-    let scores : (string | number)[];
-    scores = ['Programming', 5, 'Software Design', 4]; 
-    ```
-
-### Object type
-
-- **Object type**: Trong JavaScript, cách cơ bản mà chúng ta nhóm và truyền dữ liệu là thông qua các đối tượng. Trong TypeScript, chúng ta biểu diễn chúng thông qua object type.
-
-    ```ts
-    let employee: {
-        firstName: string;
-        lastName: string;
-        age: number;
-        jobTitle: string;
-    } = {
-        firstName: 'John',
-        lastName: 'Doe',
-        age: 25,
-        jobTitle: 'Web Developer'
-    };
     ```
 
 ### Tuples
@@ -218,7 +187,7 @@
 
     + Thường được sử dụng cho `Switch clause` để thực hiện kiểm tra toàn diện (khi đã loại bỏ tất cả khả năng và không còn gì nữa)
 
-    + Ngoài ra, **Never Types** là kiểu trả về cho biểu thức hàm
+    + Ngoài ra, **Never Types** là kiểu trả về cho biểu thức hàm hoặc biểu thức hàm
 
     ```ts
     enum SEASON {
@@ -821,6 +790,8 @@
 
 ## 🔷 Generics
 
+### Generics
+
 - **Generics** trong TS là một cách để viết code có thể hoạt động với nhiều kiểu dữ liệu, thay vì bị giới hạn ở một kiểu dữ liệu duy nhất
 
 ### Generic Types
@@ -868,3 +839,283 @@
 
     console.log(stringStorage.dataList) // [ 'VietNam', 'China', 'Singapore' ]
     ```
+
+### Generic Constraints
+
+- **Generic Constraints** cho phép chỉ định các yêu cầu cho các tham số kiểu dữ liệu được sử dụng trong **Generic Types**. Các ràng buộc này đảm bảo rằng các tham số kiểu dữ liệu được sử dụng trong **Generic Types** đáp ứng các yêu cầu nhất định
+
+- **Generic Constraints** được chỉ định bằng cách sử dụng từ khoá `extends`, theo sau là kiểu dữ liệu mà tham số kiểu dữ liệu phải mở rộng hoặc triển khai
+
+    ```ts
+    function merge<T extends {}>(objA: T, objB: T) {
+        return Object.assign(objA, objB)
+    }
+
+    console.log(merge({ language: 'typescript' }, { version: '1.2.3' }))    // { language: 'typescript', version: '1.2.3' }
+    ```
+
+- **`keyof` Generic Constraints** có thể sử dụng 2 kiểu như sau
+
+    ```ts
+    function getValueByKey<T>(obj: T, key: keyof T) {
+        return obj[key]
+    }
+
+    const account = {
+        username: 'QuanTT',
+        age: 24
+    }
+
+    // return getValueByKey: string | number
+    console.log(getValueByKey(account, 'username')) // 'QuanTT'
+    console.log(getValueByKey(account, 'age'))      // 24
+    ```
+
+    hoặc
+
+    ```ts
+    function getValueByKey<T, K extends keyof T>(obj: T, key: K) {
+        return obj[key]
+    }
+    ```
+
+### Generic Utility Types Build-in
+
+- **Utility Types** cung cấp một số kiểu tiện ích có thể được sử dụng để thao tác và chuyển đổi các kiểu hiện có. Sau đây là một số kiểu phổ biến
+
+    + **Partial** làm cho tất cả thuộc tính của một kiểu trở thành thuộc tính tuỳ chọn
+
+        ```ts
+        interface Setting {
+            id: string,
+            theme: 'LIGHT' | 'DARK'
+            language: string
+            background: string
+        }
+
+        // Error: Property 'background' is missing in type '{ id: string; theme: "LIGHT"; language: string; }'
+        //        but required in type 'Setting'.ts(2741)
+        const setting: Setting = {
+            id: '1',
+            theme: 'LIGHT',
+            language: 'VN',
+        }
+
+        // Success
+        const settingP: Partial<Setting> = {
+            id: '1',
+            theme: 'LIGHT'
+        }
+        ```
+
+    + **Readonly** làm cho tất cả thuộc tính của một kiểu thành không thể thay đổi
+
+        ```ts
+        interface Setting {
+            id: string,
+            theme: 'LIGHT' | 'DARK'
+            language: string
+            background: string
+        }
+
+        const setting: Setting = {
+            id: '1',
+            theme: 'LIGHT',
+            language: 'VN',
+            background: 'summer.jpg'
+        }
+
+        // Success
+        setting.id = '2'
+
+        const settingR: Readonly<Setting> = {
+            id: '1',
+            theme: 'DARK',
+            language: 'EN',
+            background: 'summer.jpg'
+        }
+
+        // Error: Cannot assign to 'id' because it is a read-only property.ts(2540)
+        settingR.id = '1'
+        ```
+
+# 🔷 Decorators
+
+### Decorators
+
+- **Decorators** là một tính năng của TS cho phép sửa đổi hành vi của một class, thuộc tính, phương thức hoặc tham số. Chúng là một cách để thêm chức năng bổ sung vào code hiện có và có thể được sử dụng cho nhiều tác vụ, bao gồm ghi nhật kí, tối ưu hoá hiệu suất và xác thực
+
+    ```ts
+    function Logger(args: Function) {
+        console.log(args.toString())
+    }
+
+    @Logger
+    class Setting {
+        constructor(
+            private id?: string,
+            private theme?: 'LIGHT' | 'DARK',
+            private language?: string,
+            private background?: string
+        ) {}
+
+        set setLanguage(lang: string) {
+            this.language = lang
+        }
+    }
+
+    // Output: 
+    // class Setting {
+    //     constructor(id, theme, language, background) {
+    //         this.id = id;
+    //         this.theme = theme;
+    //         this.language = language;
+    //         this.background = background;
+    //     }
+    //     set setLanguage(lang) {
+    //         this.language = lang;
+    //     }
+    // }
+    ```
+
+- **Class Decorators** được khai báo ngay trước khi khai báo class. Class Decorator được áp dụng cho constructor của class và có thể được sử dụng để quan sát, sửa đổi hoặc thay thế định nghĩa class. 
+
+    ```ts
+    function sealed(constructor: Function) {
+        Object.seal(constructor);
+        Object.seal(constructor.prototype);
+    }
+
+    @sealed
+    class BugReport {
+        type = "report";
+        title: string;
+        
+        constructor(t: string) {
+            this.title = t;
+        }
+    }
+    ```
+
+- **Method Decorators** được khai báo ngay trước khi khai báo method. Method Decorator được áp dụng cho phương thức và có thể được sử dụng để quan sát, sửa đổi hoặc thay thế một định nghĩa phương thức.
+
+    ```ts
+    function enumerable(value: boolean) {
+        return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+            descriptor.enumerable = value;
+        };
+    }
+
+    class Greeter {
+        greeting: string;
+        constructor(message: string) {
+            this.greeting = message;
+        }
+        
+        @enumerable(false)
+        greet() {
+            return "Hello, " + this.greeting;
+        }
+    }
+    ```
+
+- **Accessor Decorators** được khai báo ngay trước khi khai báo accessor. Accessor Decorator được áp dụng cho accessor và có thể được sử dụng để quan sát, sửa đổi hoặc thay thế các định nghĩa của accessor
+
+    ```ts
+    function configurable(value: boolean) {
+        return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+            descriptor.configurable = value;
+        };
+    }
+
+    class Point {
+        private _x: number;
+        private _y: number;
+        constructor(x: number, y: number) {
+            this._x = x;
+            this._y = y;
+        }
+        
+        @configurable(false)
+        get x() {
+            return this._x;
+        }
+        
+        @configurable(false)
+        get y() {
+            return this._y;
+        }
+    }
+    ```
+
+- **Property Decorators** được khai báo ngay trước khi khai báo thuộc tính. 
+
+    ```ts
+    import "reflect-metadata";
+    const formatMetadataKey = Symbol("format");
+    function format(formatString: string) {
+        return Reflect.metadata(formatMetadataKey, formatString);
+    }
+    function getFormat(target: any, propertyKey: string) {
+        return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+    }
+
+    class Greeter {
+        @format("Hello, %s")
+        greeting: string;
+        constructor(message: string) {
+            this.greeting = message;
+        }
+        greet() {
+            let formatString = getFormat(this, "greeting");
+            return formatString.replace("%s", this.greeting);
+        }
+    }
+    ```
+
+- **Parameter Decorators** được khai báo ngay trước khi khai báo tham số. 
+
+    ```ts
+    import "reflect-metadata";
+    const requiredMetadataKey = Symbol("required");
+    
+    function required(target: Object, propertyKey: string | symbol, parameterIndex: number) {
+        let existingRequiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) || [];
+        existingRequiredParameters.push(parameterIndex);
+        Reflect.defineMetadata( requiredMetadataKey, existingRequiredParameters, target, propertyKey);
+    }
+    
+    function validate(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<Function>) {
+    let method = descriptor.value!;
+    
+    descriptor.value = function () {
+        let requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
+        if (requiredParameters) {
+            for (let parameterIndex of requiredParameters) {
+                if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
+                t    hrow new Error("Missing required argument.");
+                }
+            }
+        }
+        return method.apply(this, arguments);
+    };
+    }
+
+    class BugReport {
+        type = "report";
+        title: string;
+        
+        constructor(t: string) {
+            this.title = t;
+        }
+        
+        @validate
+        print(@required verbose: boolean) {
+            if (verbose) {
+            return `type: ${this.type}\ntitle: ${this.title}`;
+            } else {
+            return this.title; 
+            }
+        }
+    }
+    ``` 
